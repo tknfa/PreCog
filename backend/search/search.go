@@ -40,12 +40,9 @@ type serpAPIResponse struct {
 }
 
 func NewServiceFromEnv() (*Service, error) {
-	apiKey := strings.TrimSpace(os.Getenv("SERPAPI_API_KEY"))
+	apiKey := firstEnvValue("SERPAPI_API_KEY", "SERPAPI_KEY", "SERP_API_KEY")
 	if apiKey == "" {
-		apiKey = strings.TrimSpace(os.Getenv("SERPAPI_KEY"))
-	}
-	if apiKey == "" {
-		return nil, errors.New("SERPAPI_API_KEY is not set")
+		return nil, errors.New("SERPAPI_API_KEY (or SERP_API_KEY) is not set")
 	}
 
 	return &Service{
@@ -55,6 +52,16 @@ func NewServiceFromEnv() (*Service, error) {
 			Timeout: 20 * time.Second,
 		},
 	}, nil
+}
+
+func firstEnvValue(keys ...string) string {
+	for _, key := range keys {
+		value := strings.TrimSpace(os.Getenv(key))
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 func (s *Service) SearchAmazon(ctx context.Context, query string, limit int) ([]Item, error) {

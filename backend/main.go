@@ -26,6 +26,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 
 func main() {
 	process_args()
+	loadDotEnvIfPresent()
 
 	var err error
 	if database, err = db.Open("primary.db"); err != nil {
@@ -35,6 +36,8 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/provider-details", detials_handler)
 	mux.HandleFunc("/resync", resync_handler)
+	mux.HandleFunc("/amazon-search", amazon_search_handler)
+	mux.HandleFunc("/amazon-image", amazon_image_handler)
 	mux.HandleFunc("/session/history", history_handler)
 	mux.HandleFunc("/session/ask", ask_handler)
 	mux.HandleFunc("/session/create", create_session_handler)
