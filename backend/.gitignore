@@ -3,3 +3,12 @@
 .env
 __pycache__
 /x
+.gocache/
+.gomodcache/
+.gopath/
+backend/.venv/
+backend/.env
+backend/primary.db
+backend/x
+frontend/my-app/node_modules/
+frontend/my-app/dist/
